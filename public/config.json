@@ -1,0 +1,28 @@
+[
+  {
+    "urlPattern": ".*chat\\.deepseek\\.com.*",
+    "actions": [
+      {
+        "selector": ".md-code-block pre",
+        "action": "mermaid-render"
+      },
+      {
+        "selector": ".markdown-body",
+        "action": "html-to-markdown"
+      }
+    ]
+  },
+  {
+    "urlPattern": ".*yuanbao\\.tencent\\.com.*",
+    "actions": [
+      {
+        "selector": "pre > code.language-mermaid",
+        "action": "mermaid-render"
+      },
+      {
+        "selector": ".md",
+        "action": "html-to-markdown"
+      }
+    ]
+  }
+] 

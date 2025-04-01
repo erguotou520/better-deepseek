@@ -1,0 +1,52 @@
+# Cursor 规则文件
+
+## 项目概述
+这是一个基于WXT框架的浏览器扩展，用于在特定网站上执行预定义的动作，如Mermaid图表渲染和HTML转Markdown复制功能。
+
+## 代码生成规则
+
+### 项目结构
+- `/entrypoints/background.ts` - 后台脚本，处理配置同步和规则匹配
+- `/entrypoints/content/index.ts` - 内容脚本，执行页面上的动作
+- `/entrypoints/popup/App.tsx` - 弹出窗口UI
+- `/lib/config.ts` - 配置管理模块
+- `/lib/actions/` - 动作实现目录
+  - `mermaid-render.ts` - Mermaid渲染实现
+  - `html-to-markdown.ts` - HTML转Markdown实现
+- `/public/config.json` - 默认配置文件
+
+### 代码风格
+- 使用TypeScript类型定义
+- 使用异步/await处理异步操作
+- 使用模块化设计
+- 注释清晰，解释复杂逻辑
+- 错误处理完善
+
+### 功能实现要点
+
+#### 配置管理
+- 使用浏览器存储API缓存配置
+- 应用启动时先读取缓存，再异步更新
+- 提供手动同步功能
+- 处理配置拉取错误并显示
+
+#### 动作执行
+- 基于URL匹配规则激活插件
+- 仅在匹配的网站上执行相应动作
+- 使用MutationObserver监听DOM变化
+- 实现Mermaid渲染和HTML转Markdown功能
+
+#### 性能优化
+- 仅在匹配的网站上激活插件
+- 使用事件委托减少事件监听器数量
+- 延迟加载非关键功能
+
+#### 用户界面
+- 简洁的弹出窗口设计
+- 显示当前页面匹配的动作
+- 显示配置同步状态和错误信息
+
+## 特殊指令
+- 生成代码时优先考虑可维护性和性能
+- 确保错误处理完善，提供用户友好的错误信息
+- 实现代码应遵循WXT框架的最佳实践
