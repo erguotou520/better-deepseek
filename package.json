@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
-    "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
+    "rm:public": "rm -rf .output/chrome-mv3/wxt.svg .output/chrome-mv3/config.json",
+    "build": "wxt build && npm run rm:public",
+    "build:firefox": "wxt build -b firefox && npm run rm:public",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
