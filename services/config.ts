@@ -99,11 +99,11 @@ class ConfigService {
       }
 
       // 完全不使用配置文件中的name和description，始终使用系统定义
-      data.forEach(rule => {
+      for (const rule of data) {
         if (Array.isArray(rule.actions)) {
           rule.actions = rule.actions.map(action => this.addMetadataToAction(action));
         }
-      });
+      }
       
       console.log("处理后的配置数据:", data);
 

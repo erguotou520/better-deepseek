@@ -7,6 +7,7 @@ import { MermaidPreview } from './mermaidPreview';
 export class MermaidService {
   private static instance: MermaidService;
   private mermaidInitialized = false;
+  private errorCount = 0;
 
   private constructor() {}
 
@@ -88,10 +89,52 @@ export class MermaidService {
   }
 
   /**
+   * 添加Mermaid样式
+   * 解决部分网页无法通过纯粹的css选择器来选择Mermaid元素的问题
+   */
+  public preRenderMermaid(preSelector: string): void {
+    if (this.preRenderMermaidForRule1(preSelector)) {
+      return;
+    }
+    console.log('preSelector不符合格式');
+  }
+  /**
+   * 规则1:
+   * t(css选择器) = 'text' ? 'add-css:css选择器:class名' 当css选择器对应的元素的text内容为text时，添加css选择器:class名
+   */
+  private preRenderMermaidForRule1(preSelector: string): boolean {
+    // 解析preSelector
+    const regex = /t\(([^)]+)\) = '([^']+)' \? 'add-css:([^:]+):([^']+)/
+    const matchResult = preSelector.match(regex);
+    if (!matchResult) {
+      console.log('preSelector不符合格式');
+      return false;
+    }
+    const [, cssSelector, text, addCssSelector, className] = matchResult;
+    const elements = document.querySelectorAll(cssSelector);
+    for (const element of elements) {
+      if (element.textContent === text) {
+        if (addCssSelector === cssSelector) {
+          element.classList.add(className);
+        } else {
+          const ele = element.closest(addCssSelector);
+          if (ele) {
+            ele.classList.add(className);
+          }
+        }
+      }
+    }
+    return true;
+  }
+  /**
    * 渲染Mermaid图表
    * @param selector CSS选择器
    */
   public async renderMermaid(selector: string): Promise<void> {
+    if (this.errorCount > 10) {
+      console.log('渲染失败次数过多，跳过');
+      return;
+    }
     console.log('开始渲染Mermaid图表，选择器:', selector);
     
     // 初始化Mermaid
@@ -107,14 +150,14 @@ export class MermaidService {
       return;
     }
 
-    console.log(`找到${elements.length}个匹配的Mermaid元素`);
+    console.log(`找到${elements.length}个匹配的Mermaid元素`, elements);
 
     // 渲染所有匹配的元素
     for (let index = 0; index < elements.length; index++) {
       const element = elements[index];
       
       // 检查是否已经渲染过
-      if (element.classList.contains('mermaid-rendered')) {
+      if (element.querySelector('.mermaid-rendered')) {
         console.log('此元素已经渲染过，跳过');
         continue;
       }
@@ -135,24 +178,25 @@ export class MermaidService {
         renderContainer.classList.add('deepseek-mermaid-render');
 
         // 替换原始元素
-        element.innerHTML = renderContainer.innerHTML;
+        // element.innerHTML = renderContainer.innerHTML;
 
         // 渲染图表
         try {
-          console.log('开始渲染图表...');
+          console.log('开始渲染图表...', mermaidText);
           // 使用mermaid包渲染
           const { svg } = await mermaid.render(renderId, mermaidText);
-          
+          renderContainer.innerHTML = svg;
+          renderContainer.classList.add('mermaid-rendered');
           // 设置渲染后的SVG
-          element.innerHTML = svg;
-          console.log('Mermaid渲染成功');
+          element.innerHTML = renderContainer.outerHTML;
+          // console.log('Mermaid渲染成功', svg);
           
           // 标记为已渲染
-          element.classList.add('mermaid-rendered');
           
           // 给SVG添加样式和交互功能
           const svgElement = element.querySelector('svg');
           if (svgElement) {
+            svgElement.style.width = `${svgElement.getAttribute('viewBox')?.split(' ')[2]}px`;
             svgElement.style.maxWidth = '100%';
             svgElement.style.height = 'auto';
             svgElement.classList.add('deepseek-mermaid-svg');
@@ -166,11 +210,13 @@ export class MermaidService {
             console.warn('未找到SVG元素');
           }
         } catch (renderError) {
+          this.errorCount++;
           console.error('Mermaid渲染失败:', renderError);
           console.error('渲染失败的Mermaid内容:', mermaidText);
           renderContainer.innerHTML = `<div class="mermaid-error">渲染失败: ${renderError instanceof Error ? renderError.message : '未知错误'}</div>`;
         }
       } catch (error) {
+        this.errorCount++;
         console.error('Mermaid处理失败:', error);
         console.error('处理失败的元素:', element);
         
@@ -186,6 +232,7 @@ export class MermaidService {
         element.appendChild(errorContainer);
       }
     }
+    this.errorCount = 0;
   }
 }
 

@@ -1,8 +1,9 @@
 export interface ActionConfig {
   selector: string;
   action: 'mermaid-render' | 'html-to-markdown';
-  name?: string;  // 动作名称
-  description?: string;  // 动作描述
+  preSelector?: string;
+  name?: string;
+  description?: string;
 }
 
 export interface RuleConfig {

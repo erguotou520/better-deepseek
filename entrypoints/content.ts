@@ -3,7 +3,7 @@
 
 import { ActionExecutor } from "../services/actionExecutor";
 import { HtmlToMarkdownService } from "../services/htmlToMarkdown";
-import type { ActionConfig, RuleConfig } from "../types/config";
+import type { RuleConfig } from "../types/config";
 
 // 监听来自后台脚本的消息
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -13,8 +13,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		// 获取选中内容的HTML
 		const selection = window.getSelection();
 		if (!selection || selection.rangeCount === 0) {
-			sendResponse({ success: false, error: '请先选择要复制的内容' });
-			return false;
+			showToast('请先选择要复制的内容');
+			return
 		}
 		
 		const range = selection.getRangeAt(0);
@@ -28,14 +28,14 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 			
 			// 复制到剪贴板
 			navigator.clipboard.writeText(markdown).then(() => {
-				sendResponse({ success: true });
+				showToast('已复制为Markdown');
 			}).catch(error => {
-				sendResponse({ success: false, error: error.message });
+				showToast(`复制失败: ${error.message}`);
 			});
 			
 			return true; // 异步响应
 		} catch (error) {
-			sendResponse({ success: false, error: error instanceof Error ? error.message : '未知错误' });
+			showToast(`复制失败: ${error instanceof Error ? error.message : '未知错误'}`);
 			return false;
 		}
 	}

@@ -1,6 +1,4 @@
-import { configService } from '../services/config';
-import { HtmlToMarkdownService } from '../services/htmlToMarkdown';
-import { RuleConfig } from '../types/config';
+import { configService } from '../services/config'
 
 export default defineBackground(() => {
   // console.log('后台脚本已加载', { id: browser.runtime.id });
@@ -18,36 +16,15 @@ export default defineBackground(() => {
   // 处理右键菜单点击
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'copyAsMarkdown' && tab?.id) {
-      try {
-        // 发送消息到内容脚本处理复制操作
-        const response = await browser.tabs.sendMessage(tab.id, {
-          action: 'copySelectedAsMarkdown',
-        });
-
-        if (response?.success) {
-          // 通知内容脚本显示成功提示
-          await browser.tabs.sendMessage(tab.id, {
-            action: 'showToast',
-            message: '已复制为Markdown'
-          });
-        } else {
-          throw new Error(response?.error || '复制失败');
-        }
-      } catch (error) {
-        console.error('复制为Markdown失败', error);
-        if (tab.id) {
-          await browser.tabs.sendMessage(tab.id, {
-            action: 'showToast',
-            message: `复制失败: ${error instanceof Error ? error.message : '未知错误'}`
-          });
-        }
-      }
+      // 发送消息到内容脚本处理复制操作
+      browser.tabs.sendMessage(tab.id, {
+        action: 'copySelectedAsMarkdown',
+      });
     }
   });
 
   // 处理来自内容脚本的消息
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('收到消息', message)
     if (message.action === 'checkRules') {
       const url = message.url;
       const matchingRules = configService.getMatchingRules(url);
@@ -70,11 +47,6 @@ export default defineBackground(() => {
     
     if (message.action === 'getConfigState') {
       sendResponse({ state: configService.getConfig() });
-      return false; // 同步响应
-    }
-    
-    if (message.action === 'getSelectedHtml') {
-      sendResponse({ html: message.html });
       return false; // 同步响应
     }
     

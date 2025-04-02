@@ -1,5 +1,4 @@
 import type { ActionConfig } from "../types/config";
-import { HtmlToMarkdownService } from "./htmlToMarkdown";
 import { MermaidService } from "./mermaid";
 
 /**
@@ -21,14 +20,15 @@ export class ActionExecutor {
 	 * 执行指定动作
 	 */
 	public async executeAction(action: ActionConfig): Promise<void> {
-		const { selector, action: actionType } = action;
+		const { selector, action: actionType, preSelector } = action;
 
 		switch (actionType) {
 			case "mermaid-render":
+				if (preSelector) {
+					this.executeMermaidPreRender(preSelector);
+				}
+				await new Promise(resolve => setTimeout(resolve, 1000));
 				await this.executeMermaidRender(selector);
-				break;
-			case "html-to-markdown":
-				await this.executeHtmlToMarkdown(selector);
 				break;
 			default:
 				console.error(`未知动作类型: ${actionType}`);
@@ -47,15 +47,13 @@ export class ActionExecutor {
 	}
 
 	/**
-	 * 执行HTML到Markdown转换动作
+	 * 执行Mermaid预渲染动作
 	 */
-	private async executeHtmlToMarkdown(selector: string): Promise<void> {
+	private async executeMermaidPreRender(preSelector: string): Promise<void> {
 		try {
-			await HtmlToMarkdownService.getInstance().setupHtmlToMarkdownMenu(
-				selector,
-			);
+			await MermaidService.getInstance().preRenderMermaid(preSelector);
 		} catch (error) {
-			console.error("执行HTML到Markdown转换动作失败", error);
+			console.error("执行Mermaid预渲染动作失败", error);
 		}
 	}
 }
