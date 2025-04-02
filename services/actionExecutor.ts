@@ -19,8 +19,8 @@ export class ActionExecutor {
 	/**
 	 * 执行指定动作
 	 */
-	public async executeAction(action: ActionConfig): Promise<void> {
-		const { selector, action: actionType, preSelector } = action;
+	public async executeAction(actionConfig: ActionConfig): Promise<void> {
+		const { action: actionType, preSelector } = actionConfig;
 
 		switch (actionType) {
 			case "mermaid-render":
@@ -28,8 +28,11 @@ export class ActionExecutor {
 					this.executeMermaidPreRender(preSelector);
 				}
 				await new Promise(resolve => setTimeout(resolve, 1000));
-				await this.executeMermaidRender(selector);
+				await this.executeMermaidRender(actionConfig);
 				break;
+			case 'html-to-markdown':
+				// do nothing
+				break
 			default:
 				console.error(`未知动作类型: ${actionType}`);
 		}
@@ -38,9 +41,9 @@ export class ActionExecutor {
 	/**
 	 * 执行Mermaid渲染动作
 	 */
-	private async executeMermaidRender(selector: string): Promise<void> {
+	private async executeMermaidRender(actionConfig: ActionConfig): Promise<void> {
 		try {
-			await MermaidService.getInstance().renderMermaid(selector);
+			await MermaidService.getInstance().renderMermaid(actionConfig);
 		} catch (error) {
 			console.error("执行Mermaid渲染动作失败", error);
 		}

@@ -2,6 +2,7 @@ export interface ActionConfig {
   selector: string;
   action: 'mermaid-render' | 'html-to-markdown';
   preSelector?: string;
+  background?: string;
   name?: string;
   description?: string;
 }

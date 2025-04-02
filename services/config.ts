@@ -15,7 +15,7 @@ export const ACTION_METADATA = {
 // 配置URL，生产环境应替换为实际URL
 const CONFIG_URL =
   process.env.NODE_ENV === "production"
-    ? "https://example.com/config.json"
+    ? "https://file.erguotou.me/better-deepseek/config.json"
     : "/config.json";
 const CONFIG_CACHE_KEY = "deepseek_extension_config";
 const CONFIG_CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24小时
@@ -41,7 +41,7 @@ class ConfigService {
       const cached = await browser.storage.local.get(CONFIG_CACHE_KEY);
       if (cached[CONFIG_CACHE_KEY]) {
         this.state = JSON.parse(cached[CONFIG_CACHE_KEY]);
-        console.log("从缓存加载配置成功", this.state);
+        // console.log("从缓存加载配置成功", this.state);
       }
     } catch (error) {
       console.error("从缓存加载配置失败", error);
@@ -56,7 +56,7 @@ class ConfigService {
       await browser.storage.local.set({
         [CONFIG_CACHE_KEY]: JSON.stringify(this.state),
       });
-      console.log("配置已保存到缓存");
+      // console.log("配置已保存到缓存");
     } catch (error) {
       console.error("保存配置到缓存失败", error);
     }
@@ -87,11 +87,11 @@ class ConfigService {
   async fetchConfig(): Promise<boolean> {
     try {
       this.state.error = undefined;
-      const response = await fetch(CONFIG_URL);
-      console.log("拉取配置响应状态:", response.status);
+      const response = await fetch(`${CONFIG_URL}?t=${+Date.now()}`);
+      // console.log("拉取配置响应状态:", response.status);
 
       const data = (await response.json()) as ConfigData;
-      console.log("获取到原始配置数据:", data);
+      // console.log("获取到原始配置数据:", data);
 
       // 验证配置数据
       if (!Array.isArray(data)) {
@@ -105,7 +105,7 @@ class ConfigService {
         }
       }
       
-      console.log("处理后的配置数据:", data);
+      // console.log("处理后的配置数据:", data);
 
       this.state = {
         data,
@@ -140,7 +140,7 @@ class ConfigService {
    */
   getMatchingRules(url: string): ConfigData {
     if (!this.state.data || !Array.isArray(this.state.data)) {
-      console.log("没有可用的配置数据");
+      // console.log("没有可用的配置数据");
       return [];
     }
 
@@ -190,7 +190,7 @@ class ConfigService {
    */
   countActions(url: string): number {
     const actions = this.getMatchingActions(url);
-    console.log("动作数量:", actions.length, "for URL:", url);
+    // console.log("动作数量:", actions.length, "for URL:", url);
     return actions.length;
   }
 }

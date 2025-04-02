@@ -5,7 +5,8 @@
       {
         "selector": ".md-code-block.language-mermaid pre",
         "preSelector": "t(.md-code-block .md-code-block-infostring) = 'mermaid' ? 'add-css:.md-code-block:language-mermaid'",
-        "action": "mermaid-render"
+        "action": "mermaid-render",
+        "background": "#181d28"
       },
       {
         "selector": ".markdown-body",
