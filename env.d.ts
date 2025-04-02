@@ -1,1 +1,1 @@
-declare const __CONFIG_URL__: string; 
+declare const __CONFIG_URL__: string

@@ -3,14 +3,15 @@
     "urlPattern": ".*chat\\.deepseek\\.com.*",
     "actions": [
       {
+        "action": "mermaid-render",
         "selector": ".md-code-block.language-mermaid pre",
         "preSelector": "t(.md-code-block .md-code-block-infostring) = 'mermaid' ? 'add-css:.md-code-block:language-mermaid'",
-        "action": "mermaid-render",
-        "background": "#181d28"
+        "customStyle": ".md-code-block{background:#fafafa;border:1px solid rgba(0,0,0,0.08);}\n.md-code-block .md-code-block-banner-wrap{background:none;}\n.md-code-block .md-code-block-banner{background:#f4f4f4;color:rgba(0,0,0,0.9);}\n"
       },
       {
         "selector": ".markdown-body",
-        "action": "html-to-markdown"
+        "action": "html-to-markdown",
+        "unnecessarySelector": [".md-code-block-banner"]
       }
     ]
   },
@@ -23,8 +24,9 @@
       },
       {
         "selector": ".md",
-        "action": "html-to-markdown"
+        "action": "html-to-markdown",
+        "unnecessarySelector": [".hyc-common-markdown__code__hd"]
       }
     ]
   }
-] 
+]
