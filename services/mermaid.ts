@@ -2,6 +2,7 @@
  * Mermaid渲染服务
  */
 import mermaid from 'mermaid';
+import { MermaidPreview } from './mermaidPreview';
 
 export class MermaidService {
   private static instance: MermaidService;
@@ -27,12 +28,11 @@ export class MermaidService {
 
     try {
       console.log('开始初始化Mermaid...');
-      window.mermaid = mermaid;
       await mermaid.initialize({
         startOnLoad: false,
         theme: 'default',
         securityLevel: 'loose',
-        logLevel: 'debug' // 设置为debug级别以获取更多日志
+        logLevel: 'error' // 设置为error级别以减少日志
       });
       this.mermaidInitialized = true;
       console.log('Mermaid初始化成功');
@@ -73,6 +73,15 @@ export class MermaidService {
         white-space: pre-wrap;
         word-break: break-all;
       }
+
+      .deepseek-mermaid-svg {
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .deepseek-mermaid-svg:hover {
+        opacity: 0.8;
+      }
     `;
     document.head.appendChild(style);
     console.log('Mermaid样式添加成功');
@@ -109,6 +118,7 @@ export class MermaidService {
         console.log('此元素已经渲染过，跳过');
         continue;
       }
+      
       try {
         const mermaidText = element.textContent?.trim();
         if (!mermaidText) {
@@ -125,9 +135,7 @@ export class MermaidService {
         renderContainer.classList.add('deepseek-mermaid-render');
 
         // 替换原始元素
-        // element.parentNode?.insertBefore(renderContainer, element);
         element.innerHTML = renderContainer.innerHTML;
-        // (element as HTMLElement).style.display = 'none';
 
         // 渲染图表
         try {
@@ -138,15 +146,22 @@ export class MermaidService {
           // 设置渲染后的SVG
           element.innerHTML = svg;
           console.log('Mermaid渲染成功');
+          
           // 标记为已渲染
           element.classList.add('mermaid-rendered');
           
-          // 给SVG添加样式
+          // 给SVG添加样式和交互功能
           const svgElement = element.querySelector('svg');
           if (svgElement) {
             svgElement.style.maxWidth = '100%';
             svgElement.style.height = 'auto';
+            svgElement.classList.add('deepseek-mermaid-svg');
             console.log('SVG样式设置成功');
+
+            // 添加点击预览功能
+            svgElement.addEventListener('click', () => {
+              MermaidPreview.getInstance().show(svgElement);
+            });
           } else {
             console.warn('未找到SVG元素');
           }
