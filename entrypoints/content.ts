@@ -244,7 +244,7 @@ function parseCustomScript(script: string): void {
       const text = parent.querySelector(textSelector)?.textContent?.trim()
       if (text) {
         vars[varName] = text
-        const targetCss = targetCssVar.replace(/\$[\w\d]+/g, (match) => {
+        const targetCss = targetCssVar.replace(/\$[\w\d]+/g, match => {
           return vars[match.replace(/\$/g, '')]
         })
         parent.querySelector(cssSelector)?.classList.add(targetCss)
