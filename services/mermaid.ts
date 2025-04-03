@@ -27,12 +27,6 @@ export class MermaidService {
       // console.log('Mermaid已经初始化，跳过');
       return
     }
-    if (actionConfig.customStyle) {
-      const style = document.createElement('style')
-      style.id = 'bd-custom-style'
-      style.textContent = actionConfig.customStyle
-      document.head.appendChild(style)
-    }
 
     try {
       // console.log('开始初始化Mermaid...');

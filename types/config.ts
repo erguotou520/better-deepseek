@@ -4,7 +4,6 @@ export interface ActionConfig {
   preSelector?: string
   unnecessarySelector?: string[]
   background?: string
-  customStyle?: string
   name?: string
   description?: string
 }
@@ -12,6 +11,8 @@ export interface ActionConfig {
 export interface RuleConfig {
   urlPattern: string
   actions: ActionConfig[]
+  customStyle?: string
+  customScripts?: string[]
 }
 
 export type ConfigData = RuleConfig[]

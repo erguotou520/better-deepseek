@@ -134,6 +134,8 @@ export default defineContentScript({
     browser.runtime.onMessage.addListener(message => {
       // console.log("内容脚本收到消息:", message);
       if (message.action === 'pageUpdated' || message.action === 'configUpdated') {
+        // 执行自定义脚本和自定义样式
+        executeCustomScriptsAndStyles(message.rules)
         // 重新执行匹配规则的动作
         executeMatchingActions(message.rules)
       }
@@ -163,12 +165,14 @@ function setupMutationObserver(rules: RuleConfig[]): void {
           // 设置新的定时器
           debounceTimer = window.setTimeout(() => {
             executeMatchingActions(rules)
+            execCustomScripts(rules)
             lastExecutionTime = Date.now()
             debounceTimer = null
           }, DEBOUNCE_DELAY)
         } else {
           // 距离上次执行已超过3秒，直接执行
           executeMatchingActions(rules)
+          execCustomScripts(rules)
           lastExecutionTime = now
         }
         break
@@ -196,6 +200,54 @@ async function executeMatchingActions(rules: RuleConfig[]): Promise<void> {
         await ActionExecutor.getInstance().executeAction(action)
       } catch (error) {
         console.error('执行动作失败', action, error)
+      }
+    }
+  }
+}
+
+/**
+ * 执行自定义脚本和自定义样式
+ */
+function executeCustomScriptsAndStyles(rules: RuleConfig[]): void {
+  for (const rule of rules) {
+    if (rule.customStyle) {
+      const style = document.createElement('style')
+      style.id = 'bd-custom-style'
+      style.textContent = rule.customStyle
+      document.head.appendChild(style)
+    }
+    for (const script of rule.customScripts || []) {
+      parseCustomScript(script)
+    }
+  }
+}
+
+function execCustomScripts(rules: RuleConfig[]): void {
+  for (const rule of rules) {
+    for (const script of rule.customScripts || []) {
+      parseCustomScript(script)
+    }
+  }
+}
+
+/**
+ * 解析自定义脚本，目前支持
+ * [scope]selector t(selector) as $var; add-css:selector:language-$var
+ */
+function parseCustomScript(script: string): void {
+  const regex = /\[scope\](.+) t\((.+)\) as \$([\w\d]+); add-css:(.+):(language-\$[\w\d-_]+)/
+  const match = script.match(regex)
+  if (match) {
+    const vars = {} as Record<string, string>
+    const [_, parentSelector, textSelector, varName, cssSelector, targetCssVar] = match
+    for (const parent of document.querySelectorAll(parentSelector)) {
+      const text = parent.querySelector(textSelector)?.textContent?.trim()
+      if (text) {
+        vars[varName] = text
+        const targetCss = targetCssVar.replace(/\$[\w\d]+/g, (match) => {
+          return vars[match.replace(/\$/g, '')]
+        })
+        parent.querySelector(cssSelector)?.classList.add(targetCss)
       }
     }
   }

@@ -1,12 +1,14 @@
 [
   {
     "urlPattern": ".*chat\\.deepseek\\.com.*",
+    "customStyle": ".md-code-block{background:#fafafa;color:#383a42;border:1px solid rgba(0,0,0,0.08);}\n.md-code-block .md-code-block-banner-wrap,.md-code-block .md-code-block-footer{background:#f4f4f4;}\n.md-code-block .md-code-block-footer > span{color:#383a42 !important;}\n.md-code-block .md-code-block-banner{background:#f4f4f4;color:rgba(0,0,0,0.9);}\n.md-code-block pre{background:none;color:#383a42;}",
+    "customScripts": [
+      "[scope].md-code-block t(.md-code-block-infostring) as $lang; add-css:pre:language-$lang"
+    ],
     "actions": [
       {
         "action": "mermaid-render",
-        "selector": ".md-code-block.language-mermaid pre",
-        "preSelector": "t(.md-code-block .md-code-block-infostring) = 'mermaid' ? 'add-css:.md-code-block:language-mermaid'",
-        "customStyle": ".md-code-block{background:#fafafa;border:1px solid rgba(0,0,0,0.08);}\n.md-code-block .md-code-block-banner-wrap{background:none;}\n.md-code-block .md-code-block-banner{background:#f4f4f4;color:rgba(0,0,0,0.9);}\n"
+        "selector": ".md-code-block pre.language-mermaid"
       },
       {
         "selector": ".markdown-body",
