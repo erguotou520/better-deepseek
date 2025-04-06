@@ -126,7 +126,11 @@ function App() {
           <span className="status-value">{formatDate(configState.lastUpdated)}</span>
         </div>
 
-        {configState.error && <div className="error-message">{browser.i18n.getMessage('error')}：{configState.error}</div>}
+        {configState.error && (
+          <div className="error-message">
+            {browser.i18n.getMessage('error')}：{configState.error}
+          </div>
+        )}
       </div>
 
       {configState.matchingActions.length > 0 ? (
@@ -152,7 +156,9 @@ function App() {
 
       <div className="action-section">
         <button className="sync-button" onClick={handleSyncConfig} disabled={configState.syncingConfig} type="button">
-          {configState.syncingConfig ? browser.i18n.getMessage('syncing_config') : browser.i18n.getMessage('sync_config')}
+          {configState.syncingConfig
+            ? browser.i18n.getMessage('syncing_config')
+            : browser.i18n.getMessage('sync_config')}
         </button>
       </div>
     </div>
