@@ -1,0 +1,41 @@
+{
+  "extName": {
+    "message": "Better DeepSeek"
+  },
+  "extDescription": {
+    "message": "Enhance DeepSeek browsing experience, supporting Mermaid diagram rendering and HTML to Markdown conversion via context menu"
+  },
+  "last_sync": {
+    "message": "Last Sync"
+  },
+  "not_sync": {
+    "message": "Not Synced"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "unknown_error": {
+    "message": "Unknown Error"
+  },
+  "current_page_actions": {
+    "message": "Actions for Current Page"
+  },
+  "no_actions": {
+    "message": "No available actions"
+  },
+  "syncing_config": {
+    "message": "Syncing..."
+  },
+  "sync_config": {
+    "message": "Sync Config"
+  },
+  "sync_config_success": {
+    "message": "Config sync successful"
+  },
+  "sync_config_failed": {
+    "message": "Config sync failed"
+  },
+  "sync_config_failed_reason": {
+    "message": "Config sync failed reason"
+  }
+}

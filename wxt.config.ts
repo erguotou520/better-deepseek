@@ -10,11 +10,12 @@ export default defineConfig({
   },
   publicDir: './public',
   manifest: {
-    name: 'Better DeepSeek',
-    description: '增强浏览体验，支持Mermaid渲染和HTML到Markdown转换',
-    version: '1.0.0',
+    name: '__MSG_extName__',
+    description: '__MSG_extDescription__',
+    version: '0.1.0',
     permissions: ['storage', 'activeTab', 'clipboardWrite', 'contextMenus', 'tabs'],
-    host_permissions: ['<all_urls>']
+    host_permissions: ['<all_urls>'],
+    default_locale: 'zh_CN',
     // content_scripts: [
     //   {
     //     matches: ['<all_urls>'],

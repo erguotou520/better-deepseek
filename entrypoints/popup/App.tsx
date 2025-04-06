@@ -106,13 +106,13 @@ function App() {
       setConfigState(prev => ({
         ...prev,
         syncingConfig: false,
-        error: error instanceof Error ? error.message : '未知错误'
+        error: error instanceof Error ? error.message : browser.i18n.getMessage('unknown_error')
       }))
     }
   }
 
   const formatDate = (timestamp: number) => {
-    if (!timestamp) return '未同步'
+    if (!timestamp) return browser.i18n.getMessage('not_sync')
     return new Date(timestamp).toLocaleString()
   }
 
@@ -122,16 +122,16 @@ function App() {
 
       <div className="status-section">
         <div className="status-item">
-          <span className="status-label">上次同步：</span>
+          <span className="status-label">{browser.i18n.getMessage('last_sync')}：</span>
           <span className="status-value">{formatDate(configState.lastUpdated)}</span>
         </div>
 
-        {configState.error && <div className="error-message">错误：{configState.error}</div>}
+        {configState.error && <div className="error-message">{browser.i18n.getMessage('error')}：{configState.error}</div>}
       </div>
 
       {configState.matchingActions.length > 0 ? (
         <div className="actions-section">
-          <h2>当前页面适用动作</h2>
+          <h2>{browser.i18n.getMessage('current_page_actions')}</h2>
           <ul className="actions-list">
             {configState.matchingActions.map((action, index) => (
               <li key={`action-${index}-${action.selector}`} className="action-item">
@@ -145,14 +145,14 @@ function App() {
         </div>
       ) : (
         <div className="actions-section">
-          <h2>当前页面适用动作</h2>
-          <div className="no-actions">无可用动作</div>
+          <h2>{browser.i18n.getMessage('current_page_actions')}</h2>
+          <div className="no-actions">{browser.i18n.getMessage('no_actions')}</div>
         </div>
       )}
 
       <div className="action-section">
         <button className="sync-button" onClick={handleSyncConfig} disabled={configState.syncingConfig} type="button">
-          {configState.syncingConfig ? '同步中...' : '同步配置'}
+          {configState.syncingConfig ? browser.i18n.getMessage('syncing_config') : browser.i18n.getMessage('sync_config')}
         </button>
       </div>
     </div>

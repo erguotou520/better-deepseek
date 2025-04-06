@@ -11,6 +11,18 @@
 - 简洁的用户界面
 - 目前支持DeepSeek官网以及元宝平台使用
 
+## 📸 预览
+
+![class chart](./assets/snapshots/zh_CN/class.png)
+
+![flow chart](./assets/snapshots/zh_CN/flowchart.png)
+
+![sequence chart](./assets/snapshots/zh_CN/sequence.png)
+
+![statechart chart](./assets/snapshots/zh_CN/state.png)
+
+![context menu](./assets/snapshots/zh_CN/contextmenu.png)
+
 ## 📥 安装
 
 1. 下载最新版本的扩展

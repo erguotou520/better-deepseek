@@ -1,0 +1,41 @@
+{
+  "extName": {
+    "message": "Better DeepSeek"
+  },
+  "extDescription": {
+    "message": "增强 DeepSeek 浏览体验，支持 Mermaid 各种图渲染以及 HTML 到 Markdown 转换的右键菜单功能"
+  },
+  "last_sync": {
+    "message": "上次同步"
+  },
+  "not_sync": {
+    "message": "未同步"
+  },
+  "error": {
+    "message": "错误"
+  },
+  "unknown_error": {
+    "message": "未知错误"
+  },
+  "current_page_actions": {
+    "message": "当前页面适用动作"
+  },
+  "no_actions": {
+    "message": "没有适用动作"
+  },
+  "syncing_config": {
+    "message": "同步中..."
+  },
+  "sync_config": {
+    "message": "同步配置"
+  },
+  "sync_config_success": {
+    "message": "同步配置成功"
+  },
+  "sync_config_failed": {
+    "message": "同步配置失败"
+  },
+  "sync_config_failed_reason": {
+    "message": "同步配置失败原因"
+  }
+}

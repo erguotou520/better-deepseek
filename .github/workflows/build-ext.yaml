@@ -1,0 +1,45 @@
+name: "Build Chrome Extension"
+permissions: {}
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - entrypoints/**
+      - services/**
+      - public/**
+      - '!public/config.json'
+      - types/**
+      - scripts/**
+      - wxt.config.ts
+      - package.json
+      - .github/workflows/build-ext.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - name: Install dependencies
+        run: bun install
+      - name: Build the extension
+        run: bun run zip && bun run zip:firefox
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - name: Create version file
+        run: echo "${{ steps.package-version.outputs.current-version }}" > .output/version.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: better-deepseek
+          path: .output
+      - name: R2 Upload Action
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: .output
+          destination-dir: ./better-deepseek/${{ steps.package-version.outputs.current-version}}/
