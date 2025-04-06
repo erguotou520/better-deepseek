@@ -33,6 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: better-deepseek
+          include-hidden-files: true
           path: |
             .output/*.zip
             .output/version.txt
