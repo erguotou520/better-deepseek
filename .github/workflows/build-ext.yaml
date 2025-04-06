@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Build the extension
-        run: bun run zip && bun run zip:firefox
+        run: bun run zip && bun run zip:firefox && rm -rf .output/chrome-mv3 .output/firefox-mv2
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: better-deepseek
-          path: .output
+          path: .output/
       - name: R2 Upload Action
         uses: ryand56/r2-upload-action@latest
         with:

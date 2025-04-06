@@ -11,7 +11,7 @@
         "selector": ".md-code-block pre.language-mermaid"
       },
       {
-        "selector": ".markdown-body",
+        "selector": ".ds-markdown",
         "action": "html-to-markdown",
         "unnecessarySelector": [".md-code-block-banner"]
       }
@@ -25,7 +25,7 @@
         "action": "mermaid-render"
       },
       {
-        "selector": ".md",
+        "selector": ".hyc-content-md",
         "action": "html-to-markdown",
         "unnecessarySelector": [".hyc-common-markdown__code__hd"]
       }
