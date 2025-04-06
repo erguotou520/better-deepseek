@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - public/config.json
-      - .github/workflows/update-config-json.yml
+      - .github/workflows/update-config-json.yaml
 
 jobs:
   build:
