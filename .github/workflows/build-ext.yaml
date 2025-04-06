@@ -33,7 +33,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: better-deepseek
-          path: .output/
+          path: |
+            .output/*.zip
+            .output/version.txt
       - name: R2 Upload Action
         uses: ryand56/r2-upload-action@latest
         with:
